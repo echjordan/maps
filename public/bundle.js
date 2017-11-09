@@ -70,10 +70,13 @@
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* WEBPACK VAR INJECTION */(function(global) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__client_hotspots__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__server_hotspots__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__client_payphones__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__client_hotspots_data__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__client_payphones_data__ = __webpack_require__(7);
 
 
-// import getPayphones, {putPayphoneData} from '../client/payphones'
+
+
 
 let map;
 global.initMap = function initMap() {
@@ -85,7 +88,8 @@ global.initMap = function initMap() {
   });
 }
 
-Object(__WEBPACK_IMPORTED_MODULE_1__server_hotspots__["a" /* default */])().then(data => Object(__WEBPACK_IMPORTED_MODULE_0__client_hotspots__["a" /* default */])(data, map))
+Object(__WEBPACK_IMPORTED_MODULE_2__client_hotspots_data__["a" /* default */])().then(data => Object(__WEBPACK_IMPORTED_MODULE_0__client_hotspots__["a" /* default */])(data, map))
+Object(__WEBPACK_IMPORTED_MODULE_3__client_payphones_data__["a" /* default */])().then(data => Object(__WEBPACK_IMPORTED_MODULE_1__client_payphones__["a" /* default */])(data, map))
 
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1)))
 
@@ -123,23 +127,44 @@ module.exports = g;
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = plotHotspots;
 function plotHotspots(data, map) {
-  // Loop through the results array and place a marker for    each set of coordinates.
-    let filteredData = data.filter((result) => {
-      return (result[9].slice(25, 41) < 40.76 && result[9].slice(25, 41) > 40.74) && (result[9].slice(7, 23) > -74 && result[9].slice(7, 23) < -73.99)
-    })
-    for (var i = 0; i < filteredData.length; i++) {
-      let coords = [filteredData[i][9].slice(7, 23), filteredData[i][9].slice(25, 41)]
-      const latLng = new google.maps.LatLng(coords[1], coords[0]);
-      const marker = new google.maps.Marker({
-        position: latLng,
-        map: map
-      });
+  let filteredData = data.filter((result) => {
+    return (result[9].slice(25, 41) < 40.76 && result[9].slice(25, 41) > 40.74) && (result[9].slice(7, 23) > -74 && result[9].slice(7, 23) < -73.99)
+  })
+  for (var i = 0; i < filteredData.length; i++) {
+    let coords = [filteredData[i][9].slice(7, 23), filteredData[i][9].slice(25, 41)]
+    const latLng = new google.maps.LatLng(coords[1], coords[0]);
+    const marker = new google.maps.Marker({
+      position: latLng,
+      map: map
+    });
   }
 }
 
 
 /***/ }),
-/* 3 */
+/* 3 */,
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = plotPayphones;
+//coording @ index 9 as "POINT (-73.8981682368399 40.74955730896312)",
+function plotPayphones(data, map) {
+  for (var i = 0; i < data.length; i++) {
+    let coords = [data[i][9].slice(7,23), data[i][9].slice(26,41)];
+    console.log('THESE ARE THE COORDS', coords)
+    const latLng = new google.maps.LatLng(coords[1], coords[0]);
+    const marker = new google.maps.Marker({
+      position: latLng,
+      map: map
+    });
+  }
+}
+
+
+/***/ }),
+/* 5 */,
+/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -150,6 +175,20 @@ const hotspotData = () => {
 }
 
 /* harmony default export */ __webpack_exports__["a"] = (hotspotData);
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+const payphoneData = () => {
+  return axios.get('https://data.cityofnewyork.us/api/views/vzju-a4ks/rows.json?accessType=DOWNLOAD')
+    .then((res) => res.data.data)
+    .catch(err => console.error(err))
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (payphoneData);
 
 
 /***/ })

@@ -1,6 +1,7 @@
 import plotHotspots from '../client/hotspots'
-import hotspotData from '../server/hotspots'
-// import getPayphones, {putPayphoneData} from '../client/payphones'
+import plotPayphones from '../client/payphones'
+import hotspotData from '../client/hotspots_data'
+import payphoneData from '../client/payphones_data'
 
 let map;
 global.initMap = function initMap() {
@@ -13,3 +14,4 @@ global.initMap = function initMap() {
 }
 
 hotspotData().then(data => plotHotspots(data, map))
+payphoneData().then(data => plotPayphones(data, map))
