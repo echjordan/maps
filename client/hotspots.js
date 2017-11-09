@@ -1,30 +1,14 @@
-import fetchHotspots from '../server/hotspots'
-
-export default function eqfeed_callback_wifi() {
-
+export default function plotHotspots(data, map) {
   // Loop through the results array and place a marker for    each set of coordinates.
-  const data = fetchHotspots()
-  console.log('THIS IS THE DATA', data)
-  if(data){
-    for (var i = 0; i < data.length; i++) {
-      let coords = [data[i][16], data[i][15]];
+    let filteredData = data.filter((result) => {
+      return (result[9].slice(25, 41) < 40.76 && result[9].slice(25, 41) > 40.74) && (result[9].slice(7, 23) > -74 && result[9].slice(7, 23) < -73.99)
+    })
+    for (var i = 0; i < filteredData.length; i++) {
+      let coords = [filteredData[i][9].slice(7, 23), filteredData[i][9].slice(25, 41)]
       const latLng = new google.maps.LatLng(coords[1], coords[0]);
       const marker = new google.maps.Marker({
         position: latLng,
         map: map
       });
-    }
   }
 }
-
-
-// window.eqfeed_callback = function (results) {
-//   for (var i = 0; i < results.features.length; i++) {
-//     var coords = results.features[i].geometry.coordinates;
-//     var latLng = new google.maps.LatLng(coords[1], coords[0]);
-//     var marker = new google.maps.Marker({
-//       position: latLng,
-//       map: map
-//     });
-//   }
-// }

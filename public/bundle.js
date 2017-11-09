@@ -70,27 +70,22 @@
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* WEBPACK VAR INJECTION */(function(global) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__client_hotspots__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__server_hotspots__ = __webpack_require__(3);
+
 
 // import getPayphones, {putPayphoneData} from '../client/payphones'
 
-var map;
-
+let map;
 global.initMap = function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     zoom: 15,
+    // // 40.7589, -73.9851 Times Square
     center: new google.maps.LatLng(40.7589, -73.9851),
     mapTypeId: 'terrain'
   });
 }
 
-Object(__WEBPACK_IMPORTED_MODULE_0__client_hotspots__["a" /* default */])()
-
-// // 40.7589, -73.9851 Times Square
-
-// function eqfeed_callback_phone(results) {
-//   putPayphoneData(results)
-// }
-
+Object(__WEBPACK_IMPORTED_MODULE_1__server_hotspots__["a" /* default */])().then(data => Object(__WEBPACK_IMPORTED_MODULE_0__client_hotspots__["a" /* default */])(data, map))
 
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1)))
 
@@ -126,38 +121,21 @@ module.exports = g;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = eqfeed_callback_wifi;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__server_hotspots__ = __webpack_require__(3);
-
-
-function eqfeed_callback_wifi() {
-
+/* harmony export (immutable) */ __webpack_exports__["a"] = plotHotspots;
+function plotHotspots(data, map) {
   // Loop through the results array and place a marker for    each set of coordinates.
-  const data = Object(__WEBPACK_IMPORTED_MODULE_0__server_hotspots__["a" /* default */])()
-  console.log('THIS IS THE DATA', data)
-  if(data){
-    for (var i = 0; i < data.length; i++) {
-      let coords = [data[i][16], data[i][15]];
+    let filteredData = data.filter((result) => {
+      return (result[9].slice(25, 41) < 40.76 && result[9].slice(25, 41) > 40.74) && (result[9].slice(7, 23) > -74 && result[9].slice(7, 23) < -73.99)
+    })
+    for (var i = 0; i < filteredData.length; i++) {
+      let coords = [filteredData[i][9].slice(7, 23), filteredData[i][9].slice(25, 41)]
       const latLng = new google.maps.LatLng(coords[1], coords[0]);
       const marker = new google.maps.Marker({
         position: latLng,
         map: map
       });
-    }
   }
 }
-
-
-// window.eqfeed_callback = function (results) {
-//   for (var i = 0; i < results.features.length; i++) {
-//     var coords = results.features[i].geometry.coordinates;
-//     var latLng = new google.maps.LatLng(coords[1], coords[0]);
-//     var marker = new google.maps.Marker({
-//       position: latLng,
-//       map: map
-//     });
-//   }
-// }
 
 
 /***/ }),
@@ -165,13 +143,13 @@ function eqfeed_callback_wifi() {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = fetchHotspots;
-//coords @ index 15/16 as LAT/LONG
-function fetchHotspots() {
-  axios.get('https://data.cityofnewyork.us/api/views/varh-9tsp/rows.json?accessType=DOWNLOAD')
-  .then((res) => res.data)
-  .catch(err => console.error(err))
+const hotspotData = () => {
+  return axios.get('https://data.cityofnewyork.us/api/views/varh-9tsp/rows.json?accessType=DOWNLOAD')
+    .then((res) => res.data.data)
+    .catch(err => console.error(err))
 }
+
+/* harmony default export */ __webpack_exports__["a"] = (hotspotData);
 
 
 /***/ })
