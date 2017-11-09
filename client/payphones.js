@@ -14,12 +14,9 @@ export function putPhoneData(){
 // set of coordinates.
   for (var i = 0; i < filteredData.length; i++) {
     console.log(filteredData[i][9])
-
+    let payphoneData = []
     let coords = [filteredData[i][9].slice(7, 23), filteredData[i][9].slice(25, 41)]
     const latLng = new google.maps.LatLng(coords[1], coords[0]);
-    const marker = new google.maps.Marker({
-      position: latLng,
-      map: map
-    })
+    payphoneData.push(latLng)
 }
 }

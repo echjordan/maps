@@ -5,7 +5,9 @@ export default function fetchHotspots() {
     url: 'https://data.cityofnewyork.us/api/views/varh-9tsp/rows.json?accessType=DOWNLOAD',
     responseType: 'json'
   })
-    .then((res) => {return res.data})
+    .then((res) => {
+      console.log(res.data)
+      return res.data})
     // .then(hotspots => {
     //   console.log(hotspots)
 
