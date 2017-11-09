@@ -130,18 +130,34 @@ module.exports = g;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__server_hotspots__ = __webpack_require__(3);
 
 
-function eqfeed_callback_wifi(results) {
+function eqfeed_callback_wifi() {
 
   // Loop through the results array and place a marker for    each set of coordinates.
   const data = Object(__WEBPACK_IMPORTED_MODULE_0__server_hotspots__["a" /* default */])()
-  console.log(data)
-  for (var i = 0; i < results.data.length; i++) {
-    let wifiData = []
-    let coords = [results.data[i][16], results.data[i][15]];
-    const latLng = new google.maps.LatLng(coords[1], coords[0]);
-    wifiData.push(latLng)
+  console.log('THIS IS THE DATA', data)
+  if(data){
+    for (var i = 0; i < data.length; i++) {
+      let coords = [data[i][16], data[i][15]];
+      const latLng = new google.maps.LatLng(coords[1], coords[0]);
+      const marker = new google.maps.Marker({
+        position: latLng,
+        map: map
+      });
+    }
   }
 }
+
+
+// window.eqfeed_callback = function (results) {
+//   for (var i = 0; i < results.features.length; i++) {
+//     var coords = results.features[i].geometry.coordinates;
+//     var latLng = new google.maps.LatLng(coords[1], coords[0]);
+//     var marker = new google.maps.Marker({
+//       position: latLng,
+//       map: map
+//     });
+//   }
+// }
 
 
 /***/ }),
@@ -152,20 +168,9 @@ function eqfeed_callback_wifi(results) {
 /* harmony export (immutable) */ __webpack_exports__["a"] = fetchHotspots;
 //coords @ index 15/16 as LAT/LONG
 function fetchHotspots() {
-  axios({
-    method: 'get',
-    url: 'https://data.cityofnewyork.us/api/views/varh-9tsp/rows.json?accessType=DOWNLOAD',
-    responseType: 'json'
-  })
-    .then((res) => {
-      console.log(res.data)
-      return res.data})
-    // .then(hotspots => {
-    //   console.log(hotspots)
-
-    //   eqfeed_callback_wifi(hotspots)
-    // })
-    .catch(err => console.error(err))
+  axios.get('https://data.cityofnewyork.us/api/views/varh-9tsp/rows.json?accessType=DOWNLOAD')
+  .then((res) => res.data)
+  .catch(err => console.error(err))
 }
 
 

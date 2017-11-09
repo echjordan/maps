@@ -1,4 +1,4 @@
-import eqfeed_callback_wifi from '../client/hotspots'
+import hotspots from '../client/hotspots'
 // import getPayphones, {putPayphoneData} from '../client/payphones'
 
 var map;
@@ -11,7 +11,7 @@ global.initMap = function initMap() {
   });
 }
 
-eqfeed_callback_wifi()
+hotspots()
 
 // // 40.7589, -73.9851 Times Square
 
