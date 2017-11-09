@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <link href="/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="map"></div>
+    <!-- use a CDN for axios to avoid having to use webpack import for an app this small -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src='map.js'></script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCxFhDzpwpOSKeHPOyivmVVlR88f6xA3E&libraries=visualization&callback=initMap"> </script>
+  </body>
+</html>
