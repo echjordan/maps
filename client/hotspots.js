@@ -1,15 +1,20 @@
 export default function plotHotspots(data, map) {
-  let filteredData = data.filter((result) => {
-    return (result[9].slice(25, 41) < 40.76 && result[9].slice(25, 41) > 40.74) && (result[9].slice(7, 23) > -74 && result[9].slice(7, 23) < -73.99)
+  // let hotspots = []
+  let filteredData = data.filter((point) => {
+    const long = point[9].slice(7, 23)
+    const lat = point[9].slice(25, 41)
+    return ((lat < 40.76 && lat > 40.74) && (long > -74 && long < -73.99))
   })
-  let hotspots = []
-  for (var i = 0; i < filteredData.length; i++) {
-    let coords = [filteredData[i][9].slice(7, 23), filteredData[i][9].slice(25, 41)]
-    hotspots.push(coords)
+  filteredData.map(point => {
+    const long = point[9].slice(7, 23)
+    const lat = point[9].slice(25, 41)
+    let coords = [long, lat]
+    // hotspots.push(coords)
     const latLng = new google.maps.LatLng(coords[1], coords[0]);
     const marker = new google.maps.Marker({
       position: latLng,
       map: map
     });
-  }
+  })
+
 }

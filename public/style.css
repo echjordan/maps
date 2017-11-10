@@ -1,24 +1,34 @@
  /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
 #map {
-  height: 100%;
-
+  height: 80vh;
+  position: relative;
 }
 /* Optional: Makes the sample page fill the window. */
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
+/* html, body {
+  /* height: 100%; */
+  /* margin: 0; */
+  /* padding-top: 20px; */
+
 
 .base-map{
+  padding-top: 20px;
+    top: 100px;
+position: relative;
 }
 
-/* .toggles{
-  display: flex;
-} */
+.toggles{
+  padding-top: 225px;
+}
 
-button{
-  transform: translateY(600px);
-  z-index: 3
+.container{
+  position: absolute;
+    z-index: 100000005;
+
+}
+
+.toggles{
+  z-index: 100000005;
+  position:absolute;
+
 }

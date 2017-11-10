@@ -18252,10 +18252,6 @@ var _react = __webpack_require__(2);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _googleMaps = __webpack_require__(35);
-
-var _googleMaps2 = _interopRequireDefault(_googleMaps);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -18263,6 +18259,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// import GoogleMapsLoader from 'google-maps'
 
 var Map = function (_Component) {
   _inherits(Map, _Component);
@@ -18276,8 +18274,72 @@ var Map = function (_Component) {
   _createClass(Map, [{
     key: 'buildMap',
     value: function buildMap() {
-      // GoogleMapsLoader.KEY = "AIzaSyBYEzNRa3FMVxwh9EWXfYR - 0rbMjUf- pvg"
-      // const map = GoogleMapsLoader.load((google) => {
+      function CenterControl(controlDiv, map) {
+
+        // Set CSS for the control border.
+        var controlUI = document.createElement('div');
+        controlUI.style.backgroundColor = '#fff';
+        controlUI.style.border = '2px solid #fff';
+        controlUI.style.borderRadius = '3px';
+        controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+        controlUI.style.cursor = 'pointer';
+        controlUI.style.marginBottom = '22px';
+        controlUI.style.textAlign = 'center';
+        controlUI.title = 'Click to recenter the map';
+        controlDiv.appendChild(controlUI);
+
+        // Set CSS for the control interior.
+        var payphones = document.createElement('div');
+        payphones.style.color = 'rgb(25,25,25)';
+        payphones.style.fontFamily = 'Roboto,Arial,sans-serif';
+        payphones.style.fontSize = '12px';
+        payphones.style.lineHeight = '38px';
+        payphones.style.paddingLeft = '5px';
+        payphones.style.paddingRight = '5px';
+        payphones.innerHTML = 'Payphones';
+        controlUI.appendChild(payphones);
+
+        var links = document.createElement('div');
+        links.style.color = 'rgb(25,25,25)';
+        links.style.fontFamily = 'Roboto,Arial,sans-serif';
+        links.style.fontSize = '12px';
+        links.style.lineHeight = '38px';
+        links.style.paddingLeft = '5px';
+        links.style.paddingRight = '5px';
+        links.innerHTML = 'LinkNYC Stations';
+        controlUI.appendChild(links);
+
+        var hotspots = document.createElement('div');
+        hotspots.style.color = 'rgb(25,25,25)';
+        hotspots.style.fontFamily = 'Roboto,Arial,sans-serif';
+        hotspots.style.fontSize = '12px';
+        hotspots.style.lineHeight = '38px';
+        hotspots.style.paddingLeft = '5px';
+        hotspots.style.paddingRight = '5px';
+        hotspots.innerHTML = 'Wifi Hotspots';
+        controlUI.appendChild(hotspots);
+
+        // Setup the click event listeners: simply set the map to Chicago.
+
+        // links.addEventListener('click', function () {
+        //   // map.setCenter(opt);
+        // });
+        // hotspots.addEventListener('click', function(){
+        //   // map.setCenter(opt2)
+        // })
+
+        var payphonePlots = (0, _payphones_data2.default)().then(function (data) {
+          return (0, _payphones2.default)(data, map);
+        });
+        // const hotspotData = hotspotData().then(data => plotHotspots(data, map))
+        // const linkData = linkData().then(data => plotLinks(data, map))
+
+        // payphones.addEventListener('click', function () {
+        //   // map.setCenter(timesSq);
+        //   if (payphonePlots) payphonePlots = null
+
+        // });
+      }
       global.initMap = function initMap() {
         var map = new google.maps.Map(document.getElementById('map'), {
           zoom: 13,
@@ -18285,27 +18347,11 @@ var Map = function (_Component) {
           center: new google.maps.LatLng(40.7589, -73.9851),
           mapTypeId: 'terrain'
         });
+        var centerControlDiv = document.createElement('div');
+        var centerControl = new CenterControl(centerControlDiv, map);
 
-        //Link stations
-        // map.data.loadGeoJson(
-        //   "https://data.cityofnewyork.us/resource/3ktt-gd74.geojson");
-        // //Payphones
-        // map.data.loadGeoJson(
-        //   "https://data.cityofnewyork.us/resource/vzju-a4ks.geojson");
-        // //Wifi hotspots
-        // map.data.loadGeoJson(
-        //   "https://data.cityofnewyork.us/resource/24t3-xqyv.geojson"
-        // );
-
-        // console.log(map.data.loadGeoJson)
-        // hotspotData().then(data => {
-        //   console.log('THIS IS THE HOTSPOT DATA IN MAP JS', data)
-        //   plotHotspots(data, map)})
-        // payphoneData().then(data => plotPayphones(data, map))
-        (0, _links_data2.default)().then(function (data) {
-          console.log('THIS IS THE DATA IN MAP JS', data);
-          (0, _links2.default)(data, map);
-        });
+        centerControlDiv.index = 1;
+        map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
       };
     }
   }, {
@@ -18314,31 +18360,8 @@ var Map = function (_Component) {
       var baseMap = this.buildMap();
       return _react2.default.createElement(
         'div',
-        null,
-        _react2.default.createElement(
-          'div',
-          { className: 'base-map' },
-          baseMap
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'toggles' },
-          _react2.default.createElement(
-            'button',
-            null,
-            'Link Stations'
-          ),
-          _react2.default.createElement(
-            'button',
-            null,
-            'Wifi Hotspots'
-          ),
-          _react2.default.createElement(
-            'button',
-            null,
-            'Payphones'
-          )
-        )
+        { className: 'container' },
+        baseMap
       );
     }
   }]);
@@ -18388,19 +18411,23 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = plotHotspots;
 function plotHotspots(data, map) {
-  var filteredData = data.filter(function (result) {
-    return result[9].slice(25, 41) < 40.76 && result[9].slice(25, 41) > 40.74 && result[9].slice(7, 23) > -74 && result[9].slice(7, 23) < -73.99;
+  // let hotspots = []
+  var filteredData = data.filter(function (point) {
+    var long = point[9].slice(7, 23);
+    var lat = point[9].slice(25, 41);
+    return lat < 40.76 && lat > 40.74 && long > -74 && long < -73.99;
   });
-  var hotspots = [];
-  for (var i = 0; i < filteredData.length; i++) {
-    var coords = [filteredData[i][9].slice(7, 23), filteredData[i][9].slice(25, 41)];
-    hotspots.push(coords);
+  filteredData.map(function (point) {
+    var long = point[9].slice(7, 23);
+    var lat = point[9].slice(25, 41);
+    var coords = [long, lat];
+    // hotspots.push(coords)
     var latLng = new google.maps.LatLng(coords[1], coords[0]);
     var marker = new google.maps.Marker({
       position: latLng,
       map: map
     });
-  }
+  });
 }
 
 /***/ }),
@@ -18417,17 +18444,16 @@ exports.default = plotPayphones;
 //coording @ index 9 as "POINT (-73.8981682368399 40.74955730896312)",
 function plotPayphones(data, map) {
   // let payphones = []
-
   var filteredData = data.filter(function (point) {
-    var lat = point[9].slice(7, 23);
-    var lang = point[9].slice(26, 41);
-    // console.log(lat,lang)
-    return lang < 40.76 && lang > 40.74 && lat > -74 && lat < -73.99;
+    var long = point[9].slice(7, 23);
+    var lat = point[9].slice(26, 41);
+    return lat < 40.76 && lat > 40.74 && long > -74 && long < -73.99;
   });
   filteredData.map(function (point) {
-    var lat = point[9].slice(7, 23);
-    var lang = point[9].slice(26, 41);
-    var coords = [lat, lang];
+    var long = point[9].slice(7, 23);
+    var lat = point[9].slice(26, 41);
+    var coords = [long, lat];
+    // payphones.push(coords)
     // const payphones = {
     //   path: google.maps.SymbolPath.CIRCLE,
     //   fillColor: '#FF7F50',
@@ -18443,7 +18469,6 @@ function plotPayphones(data, map) {
       // icon: payphones
     });
   });
-  // payphones.push(coords)
 }
 
 /***/ }),
@@ -18459,7 +18484,12 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = plotLinks;
 function plotLinks(data, map) {
   var links = [];
-  data.map(function (point) {
+  var filteredData = data.filter(function (point) {
+    var lat = point.latitude;
+    var long = point.longitude;
+    return lat < 40.76 && lat > 40.74 && long > -74 && long < -73.99;
+  });
+  filteredData.map(function (point) {
     links.push(point.latitude, point.longitude);
     var latLng = new google.maps.LatLng(point.latitude, point.longitude);
     var marker = new google.maps.Marker({
@@ -18521,7 +18551,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 var linkData = function linkData() {
   return axios.get("https://data.cityofnewyork.us/resource/3ktt-gd74.json").then(function (res) {
-    console.log('LINK DATA', res.data);
     return res.data;
   }).catch(function (err) {
     return console.error(err);
@@ -18529,235 +18558,6 @@ var linkData = function linkData() {
 };
 
 exports.default = linkData;
-
-/***/ }),
-/* 35 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;(function(root, factory) {
-
-	if (root === null) {
-		throw new Error('Google-maps package can be used only in browser');
-	}
-
-	if (true) {
-		!(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :
-				__WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	} else if (typeof exports === 'object') {
-		module.exports = factory();
-	} else {
-		root.GoogleMapsLoader = factory();
-	}
-
-})(typeof window !== 'undefined' ? window : null, function() {
-
-
-	'use strict';
-
-
-	var googleVersion = '3.18';
-
-	var script = null;
-
-	var google = null;
-
-	var loading = false;
-
-	var callbacks = [];
-
-	var onLoadEvents = [];
-
-	var originalCreateLoaderMethod = null;
-
-
-	var GoogleMapsLoader = {};
-
-
-	GoogleMapsLoader.URL = 'https://maps.googleapis.com/maps/api/js';
-
-	GoogleMapsLoader.KEY = null;
-
-	GoogleMapsLoader.LIBRARIES = [];
-
-	GoogleMapsLoader.CLIENT = null;
-
-	GoogleMapsLoader.CHANNEL = null;
-
-	GoogleMapsLoader.LANGUAGE = null;
-
-	GoogleMapsLoader.REGION = null;
-
-	GoogleMapsLoader.VERSION = googleVersion;
-
-	GoogleMapsLoader.WINDOW_CALLBACK_NAME = '__google_maps_api_provider_initializator__';
-
-
-	GoogleMapsLoader._googleMockApiObject = {};
-
-
-	GoogleMapsLoader.load = function(fn) {
-		if (google === null) {
-			if (loading === true) {
-				if (fn) {
-					callbacks.push(fn);
-				}
-			} else {
-				loading = true;
-
-				window[GoogleMapsLoader.WINDOW_CALLBACK_NAME] = function() {
-					ready(fn);
-				};
-
-				GoogleMapsLoader.createLoader();
-			}
-		} else if (fn) {
-			fn(google);
-		}
-	};
-
-
-	GoogleMapsLoader.createLoader = function() {
-		script = document.createElement('script');
-		script.type = 'text/javascript';
-		script.src = GoogleMapsLoader.createUrl();
-
-		document.body.appendChild(script);
-	};
-
-
-	GoogleMapsLoader.isLoaded = function() {
-		return google !== null;
-	};
-
-
-	GoogleMapsLoader.createUrl = function() {
-		var url = GoogleMapsLoader.URL;
-
-		url += '?callback=' + GoogleMapsLoader.WINDOW_CALLBACK_NAME;
-
-		if (GoogleMapsLoader.KEY) {
-			url += '&key=' + GoogleMapsLoader.KEY;
-		}
-
-		if (GoogleMapsLoader.LIBRARIES.length > 0) {
-			url += '&libraries=' + GoogleMapsLoader.LIBRARIES.join(',');
-		}
-
-		if (GoogleMapsLoader.CLIENT) {
-			url += '&client=' + GoogleMapsLoader.CLIENT + '&v=' + GoogleMapsLoader.VERSION;
-		}
-
-		if (GoogleMapsLoader.CHANNEL) {
-			url += '&channel=' + GoogleMapsLoader.CHANNEL;
-		}
-
-		if (GoogleMapsLoader.LANGUAGE) {
-			url += '&language=' + GoogleMapsLoader.LANGUAGE;
-		}
-
-		if (GoogleMapsLoader.REGION) {
-			url += '&region=' + GoogleMapsLoader.REGION;
-		}
-
-		return url;
-	};
-
-
-	GoogleMapsLoader.release = function(fn) {
-		var release = function() {
-			GoogleMapsLoader.KEY = null;
-			GoogleMapsLoader.LIBRARIES = [];
-			GoogleMapsLoader.CLIENT = null;
-			GoogleMapsLoader.CHANNEL = null;
-			GoogleMapsLoader.LANGUAGE = null;
-			GoogleMapsLoader.REGION = null;
-			GoogleMapsLoader.VERSION = googleVersion;
-
-			google = null;
-			loading = false;
-			callbacks = [];
-			onLoadEvents = [];
-
-			if (typeof window.google !== 'undefined') {
-				delete window.google;
-			}
-
-			if (typeof window[GoogleMapsLoader.WINDOW_CALLBACK_NAME] !== 'undefined') {
-				delete window[GoogleMapsLoader.WINDOW_CALLBACK_NAME];
-			}
-
-			if (originalCreateLoaderMethod !== null) {
-				GoogleMapsLoader.createLoader = originalCreateLoaderMethod;
-				originalCreateLoaderMethod = null;
-			}
-
-			if (script !== null) {
-				script.parentElement.removeChild(script);
-				script = null;
-			}
-
-			if (fn) {
-				fn();
-			}
-		};
-
-		if (loading) {
-			GoogleMapsLoader.load(function() {
-				release();
-			});
-		} else {
-			release();
-		}
-	};
-
-
-	GoogleMapsLoader.onLoad = function(fn) {
-		onLoadEvents.push(fn);
-	};
-
-
-	GoogleMapsLoader.makeMock = function() {
-		originalCreateLoaderMethod = GoogleMapsLoader.createLoader;
-
-		GoogleMapsLoader.createLoader = function() {
-			window.google = GoogleMapsLoader._googleMockApiObject;
-			window[GoogleMapsLoader.WINDOW_CALLBACK_NAME]();
-		};
-	};
-
-
-	var ready = function(fn) {
-		var i;
-
-		loading = false;
-
-		if (google === null) {
-			google = window.google;
-		}
-
-		for (i = 0; i < onLoadEvents.length; i++) {
-			onLoadEvents[i](google);
-		}
-
-		if (fn) {
-			fn(google);
-		}
-
-		for (i = 0; i < callbacks.length; i++) {
-			callbacks[i](google);
-		}
-
-		callbacks = [];
-	};
-
-
-	return GoogleMapsLoader;
-
-});
-
 
 /***/ })
 /******/ ]);
