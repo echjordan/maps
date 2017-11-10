@@ -3,7 +3,7 @@
 const { resolve } = require('path')
 
 module.exports = {
-  entry: './client/map.js',
+  entry: './client/Root.js',
   output: {
     path: __dirname,
     filename: './public/bundle.js'
@@ -17,7 +17,7 @@ module.exports = {
     loaders: [
       {
         test: /jsx?$/,
-        include: resolve(__dirname, './app'),
+        include: resolve(__dirname, './client'),
         loader: 'babel-loader',
         query: {
           presets: ['react', 'es2015']
