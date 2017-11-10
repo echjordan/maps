@@ -11,7 +11,7 @@
   /* padding-top: 20px; */
 
 
-.base-map{
+/* .base-map{
   padding-top: 20px;
     top: 100px;
 position: relative;
@@ -20,15 +20,9 @@ position: relative;
 .toggles{
   padding-top: 225px;
 }
+*/
 
-.container{
+.buttons{
   position: absolute;
-    z-index: 100000005;
-
-}
-
-.toggles{
   z-index: 100000005;
-  position:absolute;
-
 }

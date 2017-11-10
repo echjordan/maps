@@ -5,7 +5,6 @@ import hotspotData from '../client/hotspots_data'
 import payphoneData from '../client/payphones_data'
 import linkData from '../client/links_data'
 import React, {Component} from 'react'
-// import GoogleMapsLoader from 'google-maps'
 
 export default class Map extends Component{
   constructor(){
@@ -13,8 +12,36 @@ export default class Map extends Component{
   }
 
   buildMap(){
-    function CenterControl(controlDiv, map) {
 
+    //RENDER THE MAP
+    global.initMap = function initMap() {
+      const map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 13,
+        center: new google.maps.LatLng(40.7589, -73.9851),
+        mapTypeId: 'terrain'
+      })
+
+      var centerControlDiv = document.createElement('div');
+      var centerControl = new CenterControl(centerControlDiv, map);
+
+      let infowindow = new google.maps.InfoWindow({
+        content: '<h1>Get Wifi</h1>' + '<h3>Welcome! Use the buttons to display a particular resource.</h3>'+  '<div>This map is aimed at helping you find your nearest Free Wifi Hotspot or LinkNYC station with charging capabilities, phone, wifi and services information.</div>' + '<div>Selecting the payphone view gives you an idea of how far we need to go to make current resources as ubiquitous as payphones once were. To clear the map, refresh the page.</div>',
+        position: {lat: 40.747376, lng: -74.050575}
+      });
+
+      infowindow.open(map)
+
+      centerControlDiv.index = 1;
+      map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
+
+      //Manually load data with axios
+      // payphoneData().then(data => plotPayphones(data, map))
+      // hotspotData().then(data => plotHotspots(data, map))
+      //linkData().then(data => plotLinks(data, map))
+    }
+
+    //STYLE THE CONTROL BUTTON
+    function CenterControl(controlDiv, map) {
       // Set CSS for the control border.
       var controlUI = document.createElement('div');
       controlUI.style.backgroundColor = '#fff';
@@ -58,41 +85,25 @@ export default class Map extends Component{
       hotspots.innerHTML = 'Wifi Hotspots';
       controlUI.appendChild(hotspots);
 
-      // Setup the click event listeners: simply set the map to Chicago.
+      links.addEventListener('click', function (_, clicked = false) {
+        // if (!clicked) {
+        //   clicked=true
+          map.data.loadGeoJson("https://data.cityofnewyork.us/resource/3ktt-gd74.geojson", { idPropertyName: "links" })
+        // }else{
+        //   console.log("clicked is true", clicked)
+        //   map.data.setMap(null)
+        // }
+      });
 
-      // links.addEventListener('click', function () {
-      //   // map.setCenter(opt);
-      // });
-      // hotspots.addEventListener('click', function(){
-      //   // map.setCenter(opt2)
-      // })
-
-      const payphonePlots = payphoneData().then(data => plotPayphones(data, map))
-      // const hotspotData = hotspotData().then(data => plotHotspots(data, map))
-      // const linkData = linkData().then(data => plotLinks(data, map))
-
-      // payphones.addEventListener('click', function () {
-      //   // map.setCenter(timesSq);
-      //   if (payphonePlots) payphonePlots = null
-
-      // });
-
-    }
-    global.initMap = function initMap (){
-      const map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 13,
-        // // 40.7589, -73.9851 Times Square
-        center: new google.maps.LatLng(40.7589, -73.9851),
-        mapTypeId: 'terrain'
+      hotspots.addEventListener('click', function(){
+          map.data.loadGeoJson("https://data.cityofnewyork.us/resource/24t3-xqyv.geojson", { idPropertyName: "hotspots" })
       })
-      var centerControlDiv = document.createElement('div');
-      var centerControl = new CenterControl(centerControlDiv, map);
 
-      centerControlDiv.index = 1;
-      map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
+      payphones.addEventListener('click', function () {
+        map.data.loadGeoJson("https://data.cityofnewyork.us/resource/vzju-a4ks.geojson", { idPropertyName: "payphones" })
+      });
 
     }
-
 
   }
 
