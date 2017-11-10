@@ -1,9 +1,3 @@
-import plotHotspots from '../client/hotspots'
-import plotPayphones from '../client/payphones'
-import plotLinks from '../client/links'
-import hotspotData from '../client/hotspots_data'
-import payphoneData from '../client/payphones_data'
-import linkData from '../client/links_data'
 import React, {Component} from 'react'
 
 export default class Map extends Component{
