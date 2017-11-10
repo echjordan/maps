@@ -18289,17 +18289,23 @@ var Map = function (_Component) {
         //Link stations
         // map.data.loadGeoJson(
         //   "https://data.cityofnewyork.us/resource/3ktt-gd74.geojson");
-        //Payphones
-        map.data.loadGeoJson("https://data.cityofnewyork.us/resource/vzju-a4ks.geojson");
-        //Wifi hotspots
+        // //Payphones
+        // map.data.loadGeoJson(
+        //   "https://data.cityofnewyork.us/resource/vzju-a4ks.geojson");
+        // //Wifi hotspots
         // map.data.loadGeoJson(
         //   "https://data.cityofnewyork.us/resource/24t3-xqyv.geojson"
         // );
 
         // console.log(map.data.loadGeoJson)
-        // hotspotData().then(data => plotHotspots(data, map))
+        // hotspotData().then(data => {
+        //   console.log('THIS IS THE HOTSPOT DATA IN MAP JS', data)
+        //   plotHotspots(data, map)})
         // payphoneData().then(data => plotPayphones(data, map))
-        // hotspotData().then(data => plotLinks(data, map))
+        (0, _links_data2.default)().then(function (data) {
+          console.log('THIS IS THE DATA IN MAP JS', data);
+          (0, _links2.default)(data, map);
+        });
       };
     }
   }, {
@@ -18454,9 +18460,8 @@ exports.default = plotLinks;
 function plotLinks(data, map) {
   var links = [];
   data.map(function (point) {
-    var coords = [point[9].slice(7, 23), point[9].slice(26, 41)];
-    links.push(coords);
-    var latLng = new google.maps.LatLng(coords);
+    links.push(point.latitude, point.longitude);
+    var latLng = new google.maps.LatLng(point.latitude, point.longitude);
     var marker = new google.maps.Marker({
       position: latLng,
       map: map
@@ -18516,7 +18521,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 var linkData = function linkData() {
   return axios.get("https://data.cityofnewyork.us/resource/3ktt-gd74.json").then(function (res) {
-    return res.data.data;
+    console.log('LINK DATA', res.data);
+    return res.data;
   }).catch(function (err) {
     return console.error(err);
   });

@@ -26,18 +26,23 @@ export default class Map extends Component{
           //Link stations
           // map.data.loadGeoJson(
           //   "https://data.cityofnewyork.us/resource/3ktt-gd74.geojson");
-          //Payphones
-          map.data.loadGeoJson(
-            "https://data.cityofnewyork.us/resource/vzju-a4ks.geojson");
-          //Wifi hotspots
+          // //Payphones
+          // map.data.loadGeoJson(
+          //   "https://data.cityofnewyork.us/resource/vzju-a4ks.geojson");
+          // //Wifi hotspots
           // map.data.loadGeoJson(
           //   "https://data.cityofnewyork.us/resource/24t3-xqyv.geojson"
           // );
 
           // console.log(map.data.loadGeoJson)
-      // hotspotData().then(data => plotHotspots(data, map))
+      // hotspotData().then(data => {
+      //   console.log('THIS IS THE HOTSPOT DATA IN MAP JS', data)
+      //   plotHotspots(data, map)})
       // payphoneData().then(data => plotPayphones(data, map))
-      // hotspotData().then(data => plotLinks(data, map))
+      linkData().then(data => {
+        console.log('THIS IS THE DATA IN MAP JS', data)
+        plotLinks(data, map)
+        })
   }
 }
 
