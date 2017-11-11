@@ -12,4 +12,4 @@ module.exports = app
 .get('/*', (_, res) => res.sendFile(resolve(__dirname, '..', 'public', 'index.html')))
 
 
-app.listen(1337, () => {console.log('Server is listening on port 1337')})
+app.listen(1337 || process.env.PORT, () => {console.log('Server is listening on port 1337')})
