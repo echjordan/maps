@@ -8,6 +8,9 @@ module.exports = app
 .use(bodyParser.urlencoded({ extended: true }))
 .use(bodyParser.json())
 .use(volleyball)
+.get('/sw.js', (req,res) => {
+  res.sendFile(resolve(__dirname, '..','sw.js'))
+})
 .use(express.static(resolve(__dirname , '..' , 'public')))
 .get('/*', (_, res) => res.sendFile(resolve(__dirname, '..', 'public', 'index.html')))
 
