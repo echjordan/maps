@@ -18288,14 +18288,8 @@ var Map = function (_Component) {
         infoWindow.open(map);
         centerControlDiv.index = 1;
         map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
-
-        //Manually load data with axios
-        // payphoneData().then(data => plotPayphones(data, map))
-        // hotspotData().then(data => plotHotspots(data, map))
-        //linkData().then(data => plotLinks(data, map))
       };
 
-      //STYLE THE CONTROL BUTTON
       function CenterControl(controlDiv, map) {
         // Set CSS for the control border.
         var controlUI = document.createElement('div');
@@ -18356,6 +18350,23 @@ var Map = function (_Component) {
           map.data.loadGeoJson("https://data.cityofnewyork.us/resource/vzju-a4ks.geojson", { idPropertyName: "payphones" });
         });
       }
+
+      window.addEventListener('beforeinstallprompt', function (e) {
+        // beforeinstallprompt Event fired
+
+        // e.userChoice will return a Promise.
+        // For more details read: https://developers.google.com/web/fundamentals/getting-started/primers/promises
+        e.userChoice.then(function (choiceResult) {
+
+          console.log(choiceResult.outcome);
+
+          if (choiceResult.outcome == 'dismissed') {
+            console.log('User cancelled home screen install');
+          } else {
+            console.log('User added to home screen');
+          }
+        });
+      });
     }
   }, {
     key: 'render',
