@@ -18340,41 +18340,20 @@ var Map = function (_Component) {
         payphones.innerHTML = '  Payphones';
         controlUI.appendChild(payphones);
 
-        var ls = {
-          url: "https://emojipedia-us.s3.amazonaws.com/thumbs/120/apple/114/link-symbol_1f517.png",
-          scaledSize: { width: 20, height: 20 }
-        };
         links.addEventListener('click', function () {
           map.data.loadGeoJson("https://data.cityofnewyork.us/resource/3ktt-gd74.geojson", {
             idPropertyName: "links"
           });
-          // map.data.setStyle({
-          //   icon: ls
-          // })
         });
 
-        var hspots = {
-          url: "https://emojipedia-us.s3.amazonaws.com/thumbs/120/apple/114/antenna-with-bars_1f4f6.png",
-          scaledSize: { width: 20, height: 20 }
-        };
         hotspots.addEventListener('click', function () {
           map.data.loadGeoJson("https://data.cityofnewyork.us/resource/24t3-xqyv.geojson", {
             idPropertyName: "hotspots"
           });
-          // map.data.setStyle({
-          //   icon: hspots
-          // })
         });
 
-        var phones = {
-          url: "https://emojipedia-us.s3.amazonaws.com/thumbs/120/apple/114/telephone-receiver_1f4de.png",
-          scaledSize: { width: 20, height: 20 }
-        };
         payphones.addEventListener('click', function () {
           map.data.loadGeoJson("https://data.cityofnewyork.us/resource/vzju-a4ks.geojson", { idPropertyName: "payphones" });
-          // map.data.setStyle({
-          //   icon: phones
-          // })
         });
       }
     }
