@@ -18260,13 +18260,32 @@ var Map = function (_Component) {
         var centerControlDiv = document.createElement('div');
         var centerControl = new CenterControl(centerControlDiv, map);
 
-        var infowindow = new google.maps.InfoWindow({
-          content: '<h1>Get Wifi</h1>' + '<h3>Welcome! Use the buttons to display a particular resource.</h3>' + '<div>This map is aimed at helping you find your nearest Free Wifi Hotspot or LinkNYC station with charging capabilities, phone, wifi and services information.</div>' + '<div>Selecting the payphone view gives you an idea of how far we need to go to make current resources as ubiquitous as payphones once were. To clear the map, refresh the page.</div>',
-          position: { lat: 40.747376, lng: -74.050575 }
+        var infoText = '<h1>Get Wifi</h1>' + '<h3>Welcome! Use the buttons to display a particular resource.</h3>' + '<div>This map is aimed at helping you find your nearest Free Wifi Hotspot or LinkNYC station with charging capabilities, phone, wifi and services information.</div>' + '<div>Selecting the payphone view gives you an idea of how far we need to go to make current resources as ubiquitous as payphones once were. To clear the map, refresh the page.</div>';
+        var infoWindow = new google.maps.InfoWindow({
+          content: infoText
         });
 
-        infowindow.open(map);
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function (position) {
+            var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
 
+            infoWindow.setContent("<p>You are here ↓</p>" + infoText);
+            infoWindow.setPosition(pos);
+            infoWindow.open(map);
+            map.setCenter(pos);
+            map.setZoom(16);
+          });
+        }
+        infoWindow.setContent(infoText);
+        infoWindow.setPosition({
+          lat: 40.7308,
+          lng: -73.9973
+        });
+
+        infoWindow.open(map);
         centerControlDiv.index = 1;
         map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
 
@@ -18287,19 +18306,8 @@ var Map = function (_Component) {
         controlUI.style.cursor = 'pointer';
         controlUI.style.marginBottom = '22px';
         controlUI.style.textAlign = 'center';
-        controlUI.title = 'Click to recenter the map';
+        // controlUI.title = 'Click to recenter the map';
         controlDiv.appendChild(controlUI);
-
-        // Set CSS for the control interior.
-        var payphones = document.createElement('div');
-        payphones.style.color = 'rgb(25,25,25)';
-        payphones.style.fontFamily = 'Roboto,Arial,sans-serif';
-        payphones.style.fontSize = '12px';
-        payphones.style.lineHeight = '38px';
-        payphones.style.paddingLeft = '5px';
-        payphones.style.paddingRight = '5px';
-        payphones.innerHTML = 'Payphones';
-        controlUI.appendChild(payphones);
 
         var links = document.createElement('div');
         links.style.color = 'rgb(25,25,25)';
@@ -18321,24 +18329,52 @@ var Map = function (_Component) {
         hotspots.innerHTML = 'Wifi Hotspots';
         controlUI.appendChild(hotspots);
 
-        links.addEventListener('click', function (_) {
-          var clicked = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+        // Set CSS for the control interior.
+        var payphones = document.createElement('div');
+        payphones.style.color = 'rgb(25,25,25)';
+        payphones.style.fontFamily = 'Roboto,Arial,sans-serif';
+        payphones.style.fontSize = '11px';
+        payphones.style.lineHeight = '38px';
+        payphones.style.paddingLeft = '5px';
+        payphones.style.paddingRight = '5px';
+        payphones.innerHTML = '  Payphones';
+        controlUI.appendChild(payphones);
 
-          // if (!clicked) {
-          //   clicked=true
-          map.data.loadGeoJson("https://data.cityofnewyork.us/resource/3ktt-gd74.geojson", { idPropertyName: "links" });
-          // }else{
-          //   console.log("clicked is true", clicked)
-          //   map.data.setMap(null)
-          // }
+        var ls = {
+          url: "https://emojipedia-us.s3.amazonaws.com/thumbs/120/apple/114/link-symbol_1f517.png",
+          scaledSize: { width: 20, height: 20 }
+        };
+        links.addEventListener('click', function () {
+          map.data.loadGeoJson("https://data.cityofnewyork.us/resource/3ktt-gd74.geojson", {
+            idPropertyName: "links"
+          });
+          // map.data.setStyle({
+          //   icon: ls
+          // })
         });
 
+        var hspots = {
+          url: "https://emojipedia-us.s3.amazonaws.com/thumbs/120/apple/114/antenna-with-bars_1f4f6.png",
+          scaledSize: { width: 20, height: 20 }
+        };
         hotspots.addEventListener('click', function () {
-          map.data.loadGeoJson("https://data.cityofnewyork.us/resource/24t3-xqyv.geojson", { idPropertyName: "hotspots" });
+          map.data.loadGeoJson("https://data.cityofnewyork.us/resource/24t3-xqyv.geojson", {
+            idPropertyName: "hotspots"
+          });
+          // map.data.setStyle({
+          //   icon: hspots
+          // })
         });
 
+        var phones = {
+          url: "https://emojipedia-us.s3.amazonaws.com/thumbs/120/apple/114/telephone-receiver_1f4de.png",
+          scaledSize: { width: 20, height: 20 }
+        };
         payphones.addEventListener('click', function () {
           map.data.loadGeoJson("https://data.cityofnewyork.us/resource/vzju-a4ks.geojson", { idPropertyName: "payphones" });
+          // map.data.setStyle({
+          //   icon: phones
+          // })
         });
       }
     }
