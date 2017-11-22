@@ -18228,6 +18228,8 @@ var _react = __webpack_require__(2);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _hotspots = __webpack_require__(29);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -18248,7 +18250,6 @@ var Map = function (_Component) {
   _createClass(Map, [{
     key: 'buildMap',
     value: function buildMap() {
-
       //RENDER THE MAP
       global.initMap = function initMap() {
         var map = new google.maps.Map(document.getElementById('map'), {
@@ -18351,6 +18352,8 @@ var Map = function (_Component) {
         });
       }
 
+      (0, _hotspots.putPhoneData)();
+
       window.addEventListener('beforeinstallprompt', function (e) {
         // beforeinstallprompt Event fired
 
@@ -18412,6 +18415,63 @@ try {
 
 module.exports = g;
 
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.putPhoneData = putPhoneData;
+
+var _axios = __webpack_require__(30);
+
+var _axios2 = _interopRequireDefault(_axios);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function putPhoneData() {
+  var data = (0, _axios2.default)();
+  //Narrow results by latitude and longitude
+  var filteredData = data.filter(function (result) {
+    var lat = result[9].slice(25, 41);
+    var long = result[9].slice(7, 23);
+    return lat < 40.76 && lat > 40.74 && long > -74 && long < -73.99;
+  });
+  console.log('THIS IS FILTERED DATA', filteredData);
+  // Loop through the results array and
+  filteredData.forEach(function (elem) {
+    var payphoneData = [];
+    var coords = [elem[9].slice(25, 41), elem[9].slice(7, 23)];
+    var latLng = new google.maps.LatLng(coords[0], coords[1]);
+    payphoneData.push(latLng);
+  });
+} //PAYPHONES.JS
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var fetchPayhpones = function fetchPayhpones() {
+  return axios.get("https://data.cityofnewyork.us/api/views/varh-9tsp/rows.json?accessType=DOWNLOAD").then(function (res) {
+    return res.json(res);
+  }).catch(function (err) {
+    return console.error(err);
+  });
+};
+
+exports.default = fetchPayhpones;
 
 /***/ })
 /******/ ]);

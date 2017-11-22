@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import {putPhoneData} from './hotspots'
 
 export default class Map extends Component{
   constructor(){
@@ -6,7 +7,6 @@ export default class Map extends Component{
   }
 
   buildMap(){
-
     //RENDER THE MAP
     global.initMap = function initMap() {
       const map = new google.maps.Map(document.getElementById('map'), {
@@ -110,6 +110,9 @@ export default class Map extends Component{
         map.data.loadGeoJson("https://data.cityofnewyork.us/resource/vzju-a4ks.geojson", {idPropertyName: "payphones"})
       });
     }
+
+    putPhoneData()
+
 
     window.addEventListener('beforeinstallprompt', function (e) {
       // beforeinstallprompt Event fired
