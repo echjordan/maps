@@ -26,18 +26,6 @@ ghj
 sdfsdfd
 
 
-sdfsdfsdfd
-asdfasdfadf
-
-
-sdfa
-
-sdfsdffdsf
-
-HELLO ITS ME
-
-
-
 Testing maps
 
 Another test
