@@ -10,3 +10,17 @@ html, body {
   padding: 0;
 }
 
+.main-form{
+  display: inline;
+}
+
+.interest{
+  display:inline;
+  margin-right: 5px;
+}
+
+#home-column.column{
+  margin-top: 25%;
+  display:flex;
+  justify-content: center;
+}
