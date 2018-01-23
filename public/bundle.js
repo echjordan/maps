@@ -24959,7 +24959,7 @@ exports.default = function () {
     null,
     _react2.default.createElement(
       'div',
-      null,
+      { className: 'outermost-div' },
       _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _Main2.default }),
       _react2.default.createElement(_reactRouterDom.Route, { path: '/map', component: _BaseMap2.default })
     )
@@ -28046,31 +28046,61 @@ var MyMap = (0, _reactGoogleMaps.withScriptjs)((0, _reactGoogleMaps.withGoogleMa
   function _class() {
     _classCallCheck(this, _class);
 
-    return _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).call(this));
+
+    _this.state = {
+      wifi: 'Loading...',
+      links: 'Loading links...',
+      geolocation: null
+    };
+    return _this;
   }
 
   _createClass(_class, [{
     key: 'componentDidMount',
     value: async function componentDidMount() {
-      this.setState({ wifi: await (0, _WifiMarkers.fetchHotspots)() });
+      this.setState({
+        wifi: await (0, _WifiMarkers.fetchHotspots)(),
+        links: await (0, _WifiMarkers.fetchLinks)(),
+        geolocation: await this.getGeolocation()
+      });
+    }
+
+    //EMPTY OUT STATE ON CHANGE OF VIEW
+
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      this.setState({});
+    }
+  }, {
+    key: 'getGeolocation',
+    value: async function getGeolocation() {
+      if (navigator.geolocation) {
+        await navigator.geolocation.getCurrentPosition(function (pos) {
+          return { lat: pos.coords.latitiude, lng: pos.coords.longitude };
+        });
+      }
     }
   }, {
     key: 'render',
     value: function render() {
       var _ref = this.state || {},
-          _ref$wifi = _ref.wifi,
-          wifi = _ref$wifi === undefined ? 'Loading...' : _ref$wifi;
+          wifi = _ref.wifi,
+          links = _ref.links,
+          geolocation = _ref.geolocation;
 
       return _react2.default.createElement(
         _reactGoogleMaps.GoogleMap,
         {
-          defaultZoom: 13,
-          defaultCenter: {
+          defaultZoom: 15,
+          defaultCenter: geolocation ? geolocation : {
             lat: 40.7589,
             lng: -73.9851
           }
         },
-        this.props.location.pathname.includes('wifi') && wifi
+        this.props.location.pathname.includes('wifi') && wifi,
+        this.props.location.pathname.includes('wifi') && links
       );
     }
   }]);
@@ -28081,24 +28111,97 @@ var MyMap = (0, _reactGoogleMaps.withScriptjs)((0, _reactGoogleMaps.withGoogleMa
 var BaseMap = function (_Component2) {
   _inherits(BaseMap, _Component2);
 
-  function BaseMap(props) {
+  function BaseMap() {
     _classCallCheck(this, BaseMap);
 
-    return _possibleConstructorReturn(this, (BaseMap.__proto__ || Object.getPrototypeOf(BaseMap)).call(this, props));
-    // this.state = {hotspots: null}
+    return _possibleConstructorReturn(this, (BaseMap.__proto__ || Object.getPrototypeOf(BaseMap)).apply(this, arguments));
   }
 
   _createClass(BaseMap, [{
     key: 'render',
     value: function render() {
-      return _react2.default.createElement(MyMap, {
-        isMarkerShown: true,
-        googleMapURL: 'https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyBlmcgDIEub9IcrKrha6IN5NGCwXoHGbgw&libraries=geometry,drawing,places',
-        loadingElement: _react2.default.createElement('div', { style: { height: '100%' } }),
-        containerElement: _react2.default.createElement('div', { style: { height: '400px' } }),
-        mapElement: _react2.default.createElement('div', { style: { height: '100%' } }),
-        location: this.props.location
-      });
+      return _react2.default.createElement(
+        'div',
+        { className: 'container' },
+        _react2.default.createElement(
+          'div',
+          { className: 'columns' },
+          _react2.default.createElement(
+            'div',
+            { className: 'column is-one-fifth' },
+            _react2.default.createElement(
+              'aside',
+              { className: 'menu' },
+              _react2.default.createElement(
+                'p',
+                { className: 'menu-label' },
+                'Menu'
+              ),
+              _react2.default.createElement(
+                'ul',
+                { className: 'menu-list' },
+                _react2.default.createElement(
+                  'li',
+                  null,
+                  _react2.default.createElement(
+                    'a',
+                    { className: this.props.location.pathname.includes('wifi') ? 'is-active' : '' },
+                    'Wifi'
+                  )
+                ),
+                _react2.default.createElement(
+                  'li',
+                  null,
+                  _react2.default.createElement(
+                    'a',
+                    null,
+                    'Parking Tickets'
+                  )
+                ),
+                _react2.default.createElement(
+                  'li',
+                  null,
+                  _react2.default.createElement(
+                    'a',
+                    null,
+                    'Payroll'
+                  )
+                ),
+                _react2.default.createElement(
+                  'li',
+                  null,
+                  _react2.default.createElement(
+                    'a',
+                    null,
+                    'Noise Complaints'
+                  )
+                ),
+                _react2.default.createElement(
+                  'li',
+                  null,
+                  _react2.default.createElement(
+                    'a',
+                    null,
+                    'Occupancies'
+                  )
+                )
+              )
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'column' },
+            _react2.default.createElement(MyMap, {
+              isMarkerShown: true,
+              googleMapURL: 'https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyBlmcgDIEub9IcrKrha6IN5NGCwXoHGbgw&libraries=geometry,drawing,places',
+              loadingElement: _react2.default.createElement('div', { style: { height: '100%' } }),
+              containerElement: _react2.default.createElement('div', { style: { height: '800px' } }),
+              mapElement: _react2.default.createElement('div', { style: { height: '100%' } }),
+              location: this.props.location
+            })
+          )
+        )
+      );
     }
   }]);
 
@@ -28106,6 +28209,8 @@ var BaseMap = function (_Component2) {
 }(_react.Component);
 
 // if (navigator.geolocation) {
+// navigator.geolocation.getCurrentPosition(pos => {lat: pos.coords.latitude, lng: pos.coords.longitude})
+
 //   navigator.geolocation.getCurrentPosition(function (position) {
 //     var currentLocation = {
 //       lat: position.coords.latitude,
@@ -39416,14 +39521,13 @@ var _reactGoogleMaps = __webpack_require__(115);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var fetchLinks = async function fetchLinks() {
-  var linkMarkers = [];
   var links = await axios.get("https://data.cityofnewyork.us/api/views/3ktt-gd74/rows.json?accessType=DOWNLOAD");
   var linksArr = Array.from(links.data.data);
-  linksArr.forEach(function (elem) {
-    var coords = [elem[12], elem[13]];
-    linkMarkers.push(coords);
+  return linksArr.map(function (elem) {
+    return _react2.default.createElement(_reactGoogleMaps.Marker, { position: {
+        lat: +elem[12],
+        lng: +elem[13] } });
   });
-  return linkMarkers;
 };
 
 var fetchHotspots = async function fetchHotspots() {

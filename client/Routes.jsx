@@ -5,7 +5,7 @@ import Main from "./Components/Main"
 
 export default () =>
     <Router>
-      <div>
+      <div className="outermost-div">
         <Route exact path='/' component={Main} />
         <Route path='/map' component={BaseMap} />
       </div>

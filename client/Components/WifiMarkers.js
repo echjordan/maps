@@ -2,14 +2,11 @@ import React, {Component} from 'react'
 import {Marker} from 'react-google-maps'
 
 const fetchLinks = async () => {
-  let linkMarkers = []
   let links = await axios.get("https://data.cityofnewyork.us/api/views/3ktt-gd74/rows.json?accessType=DOWNLOAD")
   let linksArr = Array.from(links.data.data)
-  linksArr.forEach(elem => {
-    let coords = [elem[12], elem[13]]
-    linkMarkers.push(coords)
-  })
-  return linkMarkers
+  return linksArr.map(elem => <Marker position={{
+    lat: +elem[12],
+    lng: +elem[13] }} />)
 }
 
 const fetchHotspots = async () => {
@@ -21,5 +18,3 @@ const fetchHotspots = async () => {
 }
 
 export {fetchLinks, fetchHotspots}
-
-
