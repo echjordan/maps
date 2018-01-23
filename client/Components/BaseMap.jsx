@@ -1,28 +1,34 @@
 import React, {Component} from 'react'
 import {withScriptjs, withGoogleMap, GoogleMap, Marker} from 'react-google-maps';
+import {fetchHotspots, fetchLinks} from './WifiMarkers'
 
-const MyMap = withScriptjs(withGoogleMap((props) =>
-    <GoogleMap
-      defaultZoom={13}
-      defaultCenter={{
-        lat: 40.7589,
-        lng: -73.9851
-      }}
-    >
+const MyMap = withScriptjs(withGoogleMap(
+  class extends Component {
+    async componentDidMount() {
+      this.setState({wifi: await fetchHotspots()})
+    }
 
-      {props.isMarkerShown && <Marker
-        position={{
-          lat: 40.7589,
-          lng: -73.9851
-        }}
-      />}
-
-    </GoogleMap>
+    render() {
+      const {wifi='Loading...'} = this.state || {}
+      return <GoogleMap
+          defaultZoom={13}
+          defaultCenter={{
+            lat: 40.7589,
+            lng: -73.9851
+          }}
+        >{
+          this.props.location.pathname.includes('wifi') && wifi
+        }</GoogleMap>
+    }
+  }
 ))
 
-
-
 export default class BaseMap extends Component{
+  constructor(props){
+    super(props)
+    // this.state = {hotspots: null}
+  }
+
   render(){
     return(
       <MyMap
@@ -31,11 +37,11 @@ export default class BaseMap extends Component{
         loadingElement={<div style={{ height: `100%` }} />}
         containerElement={<div style={{ height: `400px` }} />}
         mapElement={<div style={{ height: `100%` }} />}
+        location = {this.props.location}
       />
     )
   }
 }
-
 
 
       // if (navigator.geolocation) {
