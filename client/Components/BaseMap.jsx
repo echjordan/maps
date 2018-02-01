@@ -1,22 +1,30 @@
 import React, { Component } from 'react'
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-maps';
+import { SearchBox } from "react-google-maps/lib/components/places/SearchBox";
 import { fetchHotspots, fetchLinks } from './WifiMarkers'
+import Sidebar from './Sidebar'
+import {dropIns, homeBases} from './Shelters'
 
-const MyMap = withScriptjs(withGoogleMap(
+export const MyMap = withScriptjs(withGoogleMap(
   class extends Component {
     constructor() {
       super()
       this.state = {
         wifi: 'Loading...',
         links: 'Loading links...',
+        dropIns: 'Loading ...',
         geolocation: null
       }
+      // this.getGeolocation = this.getGeolocation.bind(this)
     }
 
     async componentDidMount() {
       this.setState({
         wifi: await fetchHotspots(),
         links: await fetchLinks(),
+        dropIns: await dropIns(),
+        homeBases: await homeBases(),
         geolocation: await this.getGeolocation()
       })
     }
@@ -28,28 +36,31 @@ const MyMap = withScriptjs(withGoogleMap(
 
     async getGeolocation() {
       if (navigator.geolocation) {
-        await navigator.geolocation.getCurrentPosition(pos => {
+         await navigator.geolocation.getCurrentPosition(pos => {
           return { lat: pos.coords.latitiude, lng: pos.coords.longitude }
         }
         )
       }
     }
 
-
+    //Geolocation doesnt work
     render() {
-      const { wifi, links, geolocation } = this.state || {}
+      const { wifi, links, geolocation, dropIns, homeBases } = this.state || {}
       return <GoogleMap
         defaultZoom={15}
-        defaultCenter={geolocation ? geolocation : {
-          lat: 40.7589,
-          lng: -73.9851
-        }}
+        defaultCenter={geolocation ? geolocation : { lat: 40.7589, lng: -73.9851 }}
       >
 
-        {/*MAKE THIS WITH REACT ROUTER */}
-        {this.props.location.pathname.includes('wifi') && wifi}
-        {this.props.location.pathname.includes('wifi') && links}
-
+        <Router>
+          <Switch>
+          <Route exact path ='/map/wifi' render = {() => wifi} />
+          <Route exact path='/map/links' render={() => links} />
+          <Route exact path='/map/dropins' render={() => <div>
+            {dropIns}
+            {homeBases}
+            </div>} />
+          </Switch>
+        </Router>
       </GoogleMap>
     }
   }
@@ -60,20 +71,7 @@ export default class BaseMap extends Component {
     return (
       <div className='container'>
         <div className="columns">
-          <div className="column is-one-fifth">
-            <aside className="menu">
-              <p className="menu-label">
-                Menu
-            </p>
-              <ul className="menu-list">
-                <li><a className={this.props.location.pathname.includes('wifi') ? 'is-active' : ''}>Wifi</a></li>
-                <li><a>Parking Tickets</a></li>
-                <li><a>Payroll</a></li>
-                <li><a>Noise Complaints</a></li>
-                <li><a>Occupancies</a></li>
-              </ul>
-            </aside>
-          </div>
+            <Sidebar {...this.props}/>
           <div className="column">
             <MyMap
               isMarkerShown
@@ -89,20 +87,6 @@ export default class BaseMap extends Component {
     )
   }
 }
-
-
-      // if (navigator.geolocation) {
-      // navigator.geolocation.getCurrentPosition(pos => {lat: pos.coords.latitude, lng: pos.coords.longitude})
-
-      //   navigator.geolocation.getCurrentPosition(function (position) {
-      //     var currentLocation = {
-      //       lat: position.coords.latitude,
-      //       lng: position.coords.longitude
-      //     };
-      //     map.setCenter(pos);
-      //     map.setZoom(16)
-      //   });
-      // }
 
     //part of service worker implementation
     // window.addEventListener('beforeinstallprompt', function (e) {

@@ -1,3 +1,7 @@
+#main {
+  padding-top: 20px;
+}
+
 .main-form{
   display: inline;
 }
@@ -13,6 +17,19 @@
   justify-content: center;
 }
 
-.outermost-div{
-  padding-top:20px;
+aside.menu{
+  margin-bottom: 20px;
 }
+
+.content{
+  font-size: 10px;
+}
+
+#homebase-title{
+  display: inline;
+}
+
+img#homebase{
+  display: inline;
+}
+
