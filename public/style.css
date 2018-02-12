@@ -1,24 +1,8 @@
-#main {
-  padding-top: 20px;
-}
-
-.main-form{
-  display: inline;
-}
-
-.interest{
-  display:inline;
-  margin-right: 5px;
-}
-
-#home-column.column{
-  margin-top: 25%;
+#home-column{
+  margin-top: 15%;
   display:flex;
-  justify-content: center;
-}
-
-aside.menu{
-  margin-bottom: 20px;
+  flex-direction: column;
+  align-items: center;
 }
 
 .content{
@@ -26,10 +10,13 @@ aside.menu{
 }
 
 #homebase-title{
-  display: inline;
+  display: inline-block;
+}
+
+#dropins-title {
+  display: inline-block;
 }
 
 img#homebase{
-  display: inline;
+  white-space: nowrap;
 }
-

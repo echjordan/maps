@@ -10,7 +10,7 @@ const fetchLinks = async () => {
     lat: +elem[12],
     lng: +elem[13] }}
     icon={"https://cdn0.iconfinder.com/data/icons/map-location-solid-style/91/Map_-_Location_Solid_Style_06-32.png"}
-    opacity={.75}
+    opacity={.5}
 
   />)
 }

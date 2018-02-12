@@ -1,41 +1,33 @@
 import React, { Component } from 'react'
-
-const homeBaseInfo = <p>Homebase is a homelessness prevention program administered by Community-Based Organizations (CBOs) in high-need neighborhoods. The CBOs provide casework services and also help individuals and families locate existing community-based resources such as job training, child care, and anti-eviction legal services. \n \n You are strongly encouraged to call your nearest HomeBase location before visiting.Depending on your address and situation, you may be advised to go to a different HomeBase office in your borough.</p>
-
-const dropInInfo = <p>Centers that provide hot meals, showers, medical help and a place to sleep.</p>
+import { Link } from 'react-router-dom'
+import ShelterInfo from "./ShelterInfo"
 
 export default class Sidebar extends Component{
   render(){
+    console.log('this.props in sidebar', this.props)
     return(
       <div className="column is-one-fifth" id="sidebar">
       <aside className="menu">
         <p className="menu-label">Menu</p>
         <ul className="menu-list">
-          <li><a href="/map/wifi" className={this.props.location.pathname.includes('wifi') ? 'is-active' : ''}>Wifi Hotspots</a></li>
-          <li><a href="/map/links" className={this.props.location.pathname.includes('links') ? 'is-active' : ''}>Link NYC Stations</a></li>
-          <li><a href="/map/dropins" className={this.props.location.pathname.includes('dropins') ? 'is-active' : ''}>Shelters</a></li>
+          <li><Link to="/map/wifi" className={this.props.location.pathname.includes('wifi') ? 'is-active' : ''}>
+          Wifi Hotspots</Link></li>
+          <li><Link to="/map/links" className={this.props.location.pathname.includes('links') ? 'is-active' : ''}>
+          Link NYC Stations</Link></li>
+            <li onClick={() => console.log('click handler for shelters fired')}><Link to="/map/dropins" className={this.props.location.pathname.includes('dropins') ? 'is-active' : ''}>
+          Shelters</Link></li>
         </ul>
       </aside>
       <hr/>
+      {this.props.location.pathname.includes('dropins') ?
       <div className = "card">
-        <header className="card-header">
-        <p className="card-header-title">
-        Showing:
-        </p>
-        </header>
+        <header className="card-header"></header>
         <div className="card-content">
           <div className="content">
-              <h3 id="homebase-title">Homebase Locations</h3>
-              <img src="https://cdn0.iconfinder.com/data/icons/map-location-solid-style/91/Map_-_Location_Solid_Style_23-32.png" id="homebase"/>
-              {this.props.location.pathname.includes('dropins') ? homeBaseInfo : ''}
-              <hr />
-              <h3 id="dropsin-title"> Drop In Centers</h3>
-              <img src="https://cdn0.iconfinder.com/data/icons/map-location-solid-style/91/Map_-_Location_Solid_Style_24-32.png"/>
-              {this.props.location.pathname.includes('dropins') ? dropInInfo : ''}
-          </div>
-
+               <ShelterInfo />
         </div>
       </div>
+          </div> : ''}
       </div>
     )
   }

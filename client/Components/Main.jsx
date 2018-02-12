@@ -2,15 +2,13 @@ import React, { Component } from 'react'
 import {withRouter} from 'react-router'
 
 let Main = () =>
-  <div id="main" className="container">
-    <div className="columns">
-      <div id="home-column" className="column">
-        <h5 className="interest">I'm interested in finding</h5>
-        <p><a href="/map/wifi">finding hotspots</a></p>
-        <p><a href="/map/links">finding linkNYC stations</a></p>
-        <p><a href="#">a place to sleep  </a></p>
-      </div>
-    </div>
+  <div className="section">
+  <div id="home-column">
+    <p className="title is-5">I'm interested in finding</p>
+    <a href="/map/wifi">hotspots</a>
+    <a href="/map/links">Link NYC stations</a>
+    <a href="/map/dropins">a place to sleep  </a>
+  </div>
   </div>
 
 

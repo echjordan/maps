@@ -18,7 +18,6 @@ const dropIns = async () => {
 const homeBases = async () => {
   let homeBases = await axios.get("https://data.cityofnewyork.us/resource/5ud2-iqje.json")
   let homeBaseArr = Array.from(homeBases.data)
-  console.log(homeBaseArr[0])
   return homeBaseArr.map((elem, i) => <Marker
     // onClick = {() => }
     key = {i}
