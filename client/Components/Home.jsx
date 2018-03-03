@@ -1,111 +1,58 @@
 import React, { Component } from 'react'
-import {Route, Switch} from 'react-router-dom'
-import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-maps';
-// import { SearchBox } from "react-google-maps/lib/components/places/SearchBox";
-import { fetchHotspots, fetchLinks } from './WifiMarkers'
-import {dropIns, homeBases} from './Shelters'
+import MyMap from './Map'
 import Sidebar from './Sidebar'
+import { fetchHotspots, fetchLinks } from './WifiMarkers'
+import { dropIns, homeBases } from './Shelters'
 
-const MyMap = withScriptjs(withGoogleMap(
-  class extends Component {
-    constructor() {
-      super()
-      this.state = {
-        wifi: 'Loading...',
-        links: 'Loading...',
-        dropIns: 'Loading ...',
-        geolocation: null,
-        refs : {},
-        onZoomChange: null
-      }
-      // this.getGeolocation = this.getGeolocation.bind(this)
-      this.onMapMounted = this.onMapMounted.bind(this)
-      this.onZoomChanged = this.onZoomChanged.bind(this)
-
-    }
-
-    onMapMounted(ref){
-
-      this.state.refs.map = ref
-      console.log(this.state.refs)
-    }
-
-
-    onZoomChanged(){
-      this.state.refs.map.fitBounds()
-    }
-    // // componentWillMount(){
-    //   const refs= {
-    //     map:null
-    //   }
-    //   this.setState({
-    //     onMapMounted: ref => {
-    //       console.log('this is the ref', ref)
-    //       refs.map = ref
-    //       return refs
-    //     }
-    //   })
-    // }
-
-    async componentDidMount() {
-      this.setState({
-        wifi: await fetchHotspots(),
-        links: await fetchLinks(),
-        dropIns: await dropIns(),
-        homeBases: await homeBases(),
-        geolocation: await this.getGeolocation(),
-      })
-
-    }
-
-
-    //EMPTY OUT STATE ON CHANGE OF VIEW
-    componentWillUnmount() {
-      this.setState({})
-    }
-
-    async getGeolocation() {
-         await navigator.geolocation.getCurrentPosition(pos => {
-          return { lat: pos.coords.latitiude, lng: pos.coords.longitude }
-        })
-    }
-    //Geolocation doesnt work
-    render() {
-      const { wifi, links, geolocation, dropIns, homeBases } = this.state
-      return <GoogleMap
-        ref={this.onMapMounted}
-        onZoomChanged={this.onZoomChanged}
-        defaultZoom={15}
-        defaultCenter={geolocation || { lat: 40.7589, lng: -73.9851 }}
-      >
-          <Switch>
-          <Route exact path ='/map/wifi' render = {() => wifi} />
-          <Route exact path='/map/links' render={() => links} />
-          <Route exact path='/map/dropins' render={() => <div>
-            {dropIns}
-            {homeBases}
-            </div>
-          }/>
-          </Switch>
-      </GoogleMap>
-    }
-  }
-))
 
 export default class Home extends Component {
+  constructor(){
+    super()
+    this.state = {
+      wifi: 'Loading...',
+      links: 'Loading...',
+      dropIns: 'Loading ...',
+      homeBases: 'Loading ...',
+      refs: {}
+    }
+  }
+
+  async componentDidMount() {
+    this.setState({
+      wifi: await fetchHotspots(),
+      links: await fetchLinks(),
+      dropIns: await dropIns(),
+      homeBases: await homeBases()
+    })
+  }
+
+  componentWillUnmount() {
+    this.setState({})
+  }
+
   render() {
-    // console.log(this.state)
-    // console.log('BaseMap props', this.props)
     return (
       <div className='section'>
         <div className="columns">
-            <Sidebar {...this.props}/>
+          <Sidebar
+            {...this.props}
+            wifi={this.state.wifi}
+            links={this.state.links}
+            dropIns={this.state.dropIns}
+            homeBases={this.state.homeBases}
+            refs={this.state.refs}
+          />
           <div className="column">
             <MyMap
               googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyBlmcgDIEub9IcrKrha6IN5NGCwXoHGbgw&libraries=geometry,drawing,places"
               loadingElement={<div style={{ height: `100%` }} />}
               containerElement={<div style={{ height: `800px` }} />}
               mapElement={<div style={{ height: `100%` }} />}
+              wifi = {this.state.wifi}
+              links = {this.state.links}
+              dropIns = {this.state.dropIns}
+              homeBases = {this.state.homeBases}
+              refs = {this.state.refs}
             />
           </div>
         </div>
@@ -114,7 +61,25 @@ export default class Home extends Component {
   }
 }
 
-    //part of service worker implementation
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//part of service worker implementation
     // window.addEventListener('beforeinstallprompt', function (e) {
     //   // beforeinstallprompt Event fired
     //   // e.userChoice will return a Promise.

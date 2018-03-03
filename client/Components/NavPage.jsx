@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import {withRouter} from 'react-router'
 
-let Main = () =>
+let NavPage = () =>
   <div className="section">
   <div id="home-column">
     <p className="title is-5">I'm interested in finding</p>
@@ -12,4 +12,4 @@ let Main = () =>
   </div>
 
 
-export default Main = withRouter(Main)
+export default NavPage = withRouter(NavPage)
