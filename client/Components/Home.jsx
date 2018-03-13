@@ -1,45 +1,43 @@
 import React, { Component } from 'react'
 import MyMap from './Map'
 import Sidebar from './Sidebar'
-import { fetchHotspots, fetchLinks } from './WifiMarkers'
-import { dropIns, homeBases } from './Shelters'
+import { fetchHotspots, fetchLinks, makeMarkers } from './WifiMarkers'
+import { dropIns, homeBases, makeShelterMarkers } from './Shelters'
 
 
 export default class Home extends Component {
   constructor(){
     super()
     this.state = {
-      wifi: 'Loading...',
-      links: 'Loading...',
-      dropIns: 'Loading ...',
-      homeBases: 'Loading ...',
+      hotspots: [],
+      links: [],
+      dropIns: [],
+      homeBases: [],
       refs: {}
     }
   }
 
   async componentDidMount() {
     this.setState({
-      wifi: await fetchHotspots(),
-      links: await fetchLinks(),
-      dropIns: await dropIns(),
-      homeBases: await homeBases()
+      hotspots: localStorage.hotspots ? makeMarkers(JSON.parse(localStorage.hotspots), 14, 15) : await fetchHotspots(),
+      links: localStorage.links ? makeMarkers(JSON.parse(localStorage.links), 12, 13) : await fetchLinks(),
+      dropIns: localStorage.dropIns ? makeShelterMarkers(JSON.parse(localStorage.dropIns)) : await dropIns(),
+      homeBases: localStorage.homeBases ? makeShelterMarkers(JSON.parse(localStorage.homeBases)) : await homeBases()
     })
   }
 
-  componentWillUnmount() {
-    this.setState({})
-  }
+  // componentWillUnmount() {
+  //   this.setState({})
+  // }
 
   render() {
+    // console.log('hotspots split', localStorage.hotspots.split(','))
     return (
       <div className='section'>
         <div className="columns">
           <Sidebar
             {...this.props}
-            wifi={this.state.wifi}
-            links={this.state.links}
-            dropIns={this.state.dropIns}
-            homeBases={this.state.homeBases}
+            homeBases={this.state.homeBases }
             refs={this.state.refs}
           />
           <div className="column">
@@ -48,7 +46,7 @@ export default class Home extends Component {
               loadingElement={<div style={{ height: `100%` }} />}
               containerElement={<div style={{ height: `800px` }} />}
               mapElement={<div style={{ height: `100%` }} />}
-              wifi = {this.state.wifi}
+              hotspots = {this.state.hotspots}
               links = {this.state.links}
               dropIns = {this.state.dropIns}
               homeBases = {this.state.homeBases}

@@ -11,8 +11,8 @@ const MyMap = withScriptjs(withGoogleMap(
       this.state = {
         geolocation: null,
       }
-      // this.getGeolocation = this.getGeolocation.bind(this)
       this.onMapMounted = this.onMapMounted.bind(this)
+      // this.getGeolocation = this.getGeolocation.bind(this)
       // this.onBoundsChanged = this.onBoundsChanged.bind(this)
 
     }
@@ -29,6 +29,7 @@ const MyMap = withScriptjs(withGoogleMap(
       this.setState({
         geolocation: await this.getGeolocation(),
       })
+
     }
 
     async getGeolocation() {
@@ -39,7 +40,7 @@ const MyMap = withScriptjs(withGoogleMap(
 
     //Geolocation doesnt work
     render() {
-      const { wifi, links, dropIns, homeBases } = this.props
+      const { hotspots, links, dropIns, homeBases } = this.props
       const {geolocation} = this.state
       return <GoogleMap
         ref={this.onMapMounted}
@@ -48,7 +49,7 @@ const MyMap = withScriptjs(withGoogleMap(
         defaultCenter={geolocation || { lat: 40.7589, lng: -73.9851 }}
       >
         <Switch>
-          <Route exact path='/map/wifi' render={() =>  wifi} />
+          <Route exact path='/map/wifi' render={() =>  hotspots} />
           <Route exact path='/map/links' render={() => links} />
           <Route exact path='/map/dropins' render={() => <div>
             {dropIns}

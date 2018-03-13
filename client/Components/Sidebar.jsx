@@ -8,15 +8,14 @@ export default class Sidebar extends Component{
     this.handleZoom = this.handleZoom.bind(this)
   }
 
-  handleZoom(zoomFor){
-    let collection = this.props.homeBases
-    const sortedPoints = _.sortBy(collection, ['props.position.lat', 'props.position.lng'])
-    console.log('sortedPoints', sortedPoints)
+  handleZoom(){
+    if (!this.props.homeBases.length) return
+    const sortedPoints = _.sortBy(this.props.homeBases, ['props.position.lat', 'props.position.lng'])
     let north = sortedPoints[sortedPoints.length - 1].props.position.lat
     let south = sortedPoints[0].props.position.lat
     let east = sortedPoints[sortedPoints.length - 1].props.position.lng
     let west = sortedPoints[0].props.position.lng
-    this.props.refs.map.fitBounds({ east, north, south, west })
+    this.props.refs.map.fitBounds({ north, south, east, west })
   }
 
   render(){
@@ -38,7 +37,7 @@ export default class Sidebar extends Component{
                 Link NYC Stations
               </Link>
             </li>
-            <li onClick={() => this.handleZoom()}>
+            <li onClick={this.handleZoom}>
               <Link to="/map/dropins" className={dropInsView ? 'is-active' : ''}>
                 Shelters
               </Link>
