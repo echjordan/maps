@@ -28081,15 +28081,9 @@ var Home = function (_Component) {
         homeBases: localStorage.homeBases ? (0, _Shelters.makeShelterMarkers)(JSON.parse(localStorage.homeBases)) : await (0, _Shelters.homeBases)()
       });
     }
-
-    // componentWillUnmount() {
-    //   this.setState({})
-    // }
-
   }, {
     key: 'render',
     value: function render() {
-      // console.log('hotspots split', localStorage.hotspots.split(','))
       return _react2.default.createElement(
         'div',
         { className: 'section' },
@@ -56675,10 +56669,13 @@ var Sidebar = function (_Component) {
     value: function handleZoom() {
       if (!this.props.homeBases.length) return;
       var sortedPoints = _.sortBy(this.props.homeBases, ['props.position.lat', 'props.position.lng']);
-      var north = sortedPoints[sortedPoints.length - 1].props.position.lat;
-      var south = sortedPoints[0].props.position.lat;
-      var east = sortedPoints[sortedPoints.length - 1].props.position.lng;
-      var west = sortedPoints[0].props.position.lng;
+      var lastEle = sortedPoints[sortedPoints.length - 1];
+      var firstEle = sortedPoints[0];
+      var north = lastEle.props.position.lat;
+      var south = firstEle.props.position.lat;
+      var west = lastEle.props.position.lng;
+      var east = firstEle.props.position.lng;
+      console.log('north', north, 's', south, 'e', east, 'w', west);
       this.props.refs.map.fitBounds({ north: north, south: south, east: east, west: west });
     }
   }, {
@@ -56835,30 +56832,26 @@ var _reactGoogleMaps = __webpack_require__(74);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var fetchLinks = async function fetchLinks() {
-  console.log('fetch links is being called');
   var links = await axios.get("https://data.cityofnewyork.us/api/views/3ktt-gd74/rows.json?accessType=DOWNLOAD");
   var linksArr = Array.from(links.data.data);
-  // console.log('this is the links array', linksArr)
   localStorage.setItem("links", JSON.stringify(links.data.data));
   return makeMarkers(linksArr, 12, 13);
 };
 
 var fetchHotspots = async function fetchHotspots() {
-  console.log('fetchHostpos is beig called');
   var hotspots = await axios.get("https://data.cityofnewyork.us/api/views/24t3-xqyv/rows.json?accessType=DOWNLOAD");
   var hotspotsArr = Array.from(hotspots.data.data);
   localStorage.setItem("hotspots", JSON.stringify(hotspots.data.data));
   return makeMarkers(hotspotsArr, 14, 15);
 };
 
-var makeMarkers = function makeMarkers(arr, lat, lng) {
-  console.log('makin markers!');
+var makeMarkers = function makeMarkers(arr, latIndex, lngIndex) {
   return arr.map(function (elem, i) {
     return _react2.default.createElement(_reactGoogleMaps.Marker, {
       key: i,
       position: {
-        lat: +elem[lat],
-        lng: +elem[lng]
+        lat: +elem[latIndex],
+        lng: +elem[lngIndex]
       },
       icon: "https://cdn0.iconfinder.com/data/icons/map-location-solid-style/91/Map_-_Location_Solid_Style_06-32.png",
       opacity: .75
@@ -56895,7 +56888,6 @@ var dropIns = async function dropIns() {
   var dropInsArr = Array.from(dropIns.data).filter(function (ele) {
     return !isNaN(ele.latitude);
   });
-  console.log('this is the dropins array', dropInsArr);
   localStorage.setItem("dropIns", JSON.stringify(dropInsArr));
   return makeShelterMarkers(dropInsArr);
 };

@@ -26,12 +26,7 @@ export default class Home extends Component {
     })
   }
 
-  // componentWillUnmount() {
-  //   this.setState({})
-  // }
-
   render() {
-    // console.log('hotspots split', localStorage.hotspots.split(','))
     return (
       <div className='section'>
         <div className="columns">

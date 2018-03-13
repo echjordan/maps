@@ -11,10 +11,13 @@ export default class Sidebar extends Component{
   handleZoom(){
     if (!this.props.homeBases.length) return
     const sortedPoints = _.sortBy(this.props.homeBases, ['props.position.lat', 'props.position.lng'])
-    let north = sortedPoints[sortedPoints.length - 1].props.position.lat
-    let south = sortedPoints[0].props.position.lat
-    let east = sortedPoints[sortedPoints.length - 1].props.position.lng
-    let west = sortedPoints[0].props.position.lng
+    const lastEle = sortedPoints[sortedPoints.length - 1]
+    const firstEle = sortedPoints[0]
+    let north = lastEle.props.position.lat
+    let south = firstEle.props.position.lat
+    let west = lastEle.props.position.lng
+    let east = firstEle.props.position.lng
+    console.log('north', north, 's', south, 'e', east, 'w', west)
     this.props.refs.map.fitBounds({ north, south, east, west })
   }
 

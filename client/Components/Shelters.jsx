@@ -4,10 +4,8 @@ import { Marker, withGoogleMap } from 'react-google-maps'
 const dropIns = async () => {
   let dropIns = await axios.get("https://data.cityofnewyork.us/resource/kjtk-8yxq.json")
   let dropInsArr = Array.from(dropIns.data).filter(ele => !isNaN(ele.latitude))
-  console.log('this is the dropins array', dropInsArr)
   localStorage.setItem("dropIns", JSON.stringify(dropInsArr))
   return makeShelterMarkers(dropInsArr)
-
 }
 
 const homeBases = async () => {
@@ -26,7 +24,7 @@ const makeShelterMarkers = (arr) => {
       lng: +elem.longitude
     }}
   />
-)
+  )
 }
 
 
