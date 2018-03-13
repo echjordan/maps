@@ -9,36 +9,24 @@ const MyMap = withScriptjs(withGoogleMap(
     constructor() {
       super()
       this.state = {
-        geolocation: null,
+        geolocation: null
       }
       this.onMapMounted = this.onMapMounted.bind(this)
-      // this.getGeolocation = this.getGeolocation.bind(this)
-      // this.onBoundsChanged = this.onBoundsChanged.bind(this)
-
     }
 
     onMapMounted(ref) {
       this.props.refs.map = ref
     }
 
-    // onBoundsChanged() {
-
-    // }
-
     async componentDidMount() {
-      this.setState({
-        geolocation: await this.getGeolocation(),
-      })
-
+        let cb = pos => {
+          console.log('this success callback is running');
+          this.setState({ geolocation: { lat: pos.coords.latitude, lng: pos.coords.longitude }})
+        }
+        let errCb = err => console.log(err.status, err.code)
+        await navigator.geolocation.getCurrentPosition(cb, errCb)
     }
 
-    async getGeolocation() {
-      await navigator.geolocation.getCurrentPosition(pos => {
-        return { lat: pos.coords.latitiude, lng: pos.coords.longitude }
-      })
-    }
-
-    //Geolocation doesnt work
     render() {
       const { hotspots, links, dropIns, homeBases } = this.props
       const {geolocation} = this.state
@@ -46,7 +34,8 @@ const MyMap = withScriptjs(withGoogleMap(
         ref={this.onMapMounted}
         onZoomChanged={this.onZoomChanged}
         defaultZoom={15}
-        defaultCenter={geolocation || { lat: 40.7589, lng: -73.9851 }}
+        defaultCenter={{ lat: 40.7589, lng: -73.9851 }}
+        center={geolocation}
       >
         <Switch>
           <Route exact path='/map/wifi' render={() =>  hotspots} />

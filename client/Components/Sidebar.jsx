@@ -17,7 +17,6 @@ export default class Sidebar extends Component{
     let south = firstEle.props.position.lat
     let west = lastEle.props.position.lng
     let east = firstEle.props.position.lng
-    console.log('north', north, 's', south, 'e', east, 'w', west)
     this.props.refs.map.fitBounds({ north, south, east, west })
   }
 
