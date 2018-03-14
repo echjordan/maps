@@ -1,0 +1,15 @@
+import React, { Component } from 'react'
+import {withRouter} from 'react-router'
+
+let NavPage = () =>
+  <div className="section">
+  <div id="home-column">
+    <p className="title is-5">I'm interested in finding</p>
+    <a href="/map/wifi">hotspots</a>
+    <a href="/map/links">Link NYC stations</a>
+    <a href="/map/dropins">a place to sleep  </a>
+  </div>
+  </div>
+
+
+export default NavPage = withRouter(NavPage)
