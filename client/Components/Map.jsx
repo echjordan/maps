@@ -1,5 +1,3 @@
-const _ = require('lodash')
-
 import React, { Component } from 'react'
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-maps';
 import { Route, Switch } from 'react-router-dom'
@@ -19,12 +17,13 @@ const MyMap = withScriptjs(withGoogleMap(
     }
 
     async componentDidMount() {
-        let cb = pos => {
-          console.log('this success callback is running');
-          this.setState({ geolocation: { lat: pos.coords.latitude, lng: pos.coords.longitude }})
-        }
-        let errCb = err => console.log(err.status, err.code)
-        await navigator.geolocation.getCurrentPosition(cb, errCb)
+      let cb = pos => {
+        this.setState({
+          geolocation: { lat: pos.coords.latitude, lng: pos.coords.longitude }
+        })
+      }
+      let errCb = err => console.log(err.status, err.code)
+      await navigator.geolocation.getCurrentPosition(cb, errCb)
     }
 
     render() {
@@ -32,7 +31,6 @@ const MyMap = withScriptjs(withGoogleMap(
       const {geolocation} = this.state
       return <GoogleMap
         ref={this.onMapMounted}
-        onZoomChanged={this.onZoomChanged}
         defaultZoom={15}
         defaultCenter={{ lat: 40.7589, lng: -73.9851 }}
         center={geolocation}

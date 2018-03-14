@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Marker} from 'react-google-maps'
+import {Marker, InfoWindow} from 'react-google-maps'
 
 const fetchLinks = async () => {
   let links = await axios.get("https://data.cityofnewyork.us/api/views/3ktt-gd74/rows.json?accessType=DOWNLOAD")
@@ -24,7 +24,8 @@ const makeMarkers = (arr, latIndex, lngIndex) =>{
     }}
     icon={"https://cdn0.iconfinder.com/data/icons/map-location-solid-style/91/Map_-_Location_Solid_Style_06-32.png"}
     opacity={.75}
-  />)
+  />
+)
 }
 
 

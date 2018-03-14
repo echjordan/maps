@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Marker, withGoogleMap } from 'react-google-maps'
+import { Marker } from 'react-google-maps'
 
 const dropIns = async () => {
   let dropIns = await axios.get("https://data.cityofnewyork.us/resource/kjtk-8yxq.json")
@@ -23,6 +23,7 @@ const makeShelterMarkers = (arr) => {
       lat: +elem.latitude,
       lng: +elem.longitude
     }}
+    onClick={() => console.log('yes')}
   />
   )
 }
