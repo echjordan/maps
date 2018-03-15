@@ -3,8 +3,19 @@
     "short_name": "getWifi",
     "start_url": "index.html",
     "display": "standalone",
-    "background_color": "#5fa8fb",
-    "description": "Find NYC wifi near you.",
-    "theme_color": "#5fa8fb",
-    "icons": []
+    "background_color": "#A5A5A5",
+    "description": "Find NYC resources near you.",
+    "theme_color": "#A5A5A5",
+    "icons": [
+        {
+            "src": "256_icon.png",
+            "type": "image/png",
+            "sizes":"256x256"
+        },
+        {
+            "src": "512_icon.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        }
+    ]
 }
