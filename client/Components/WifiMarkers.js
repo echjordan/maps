@@ -1,3 +1,5 @@
+const axios = require('axios')
+
 import React, {Component} from 'react'
 import {Marker, InfoWindow} from 'react-google-maps'
 
